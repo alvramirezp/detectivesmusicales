@@ -382,7 +382,7 @@
             },
             "i": {
                 title: "i) Competencias tecnológicas",
-                text: "Desarrollar las competencias tecnológicas básicas e iniciarse en su utilización, para el aprendizaje, desarrollando un espíritu crítico ante su funcionamiento y los mensajes que reciben y elaboran.",
+                text: "Desarrollar las competencias tecnológicas básicas e iniciarse su utilización, para el aprendizaje, desarrollando un espíritu crítico ante su funcionamiento y los mensajes que reciben y elaboran.",
                 contribution: "Mediante la utilización herramientas digitales de forma eficaz y eficiente bajo la guía y la supervisión docente, así como el acceso a material y actividades de ampliación o para la creación y la composición musical.",
                 icon: "laptop"
             },
@@ -411,7 +411,7 @@
                 code: "CCL",
                 name: "Competencia en Comunicación Lingüística",
                 text: "La competencia en comunicación lingüística supone interactuar de forma oral, escrita, signada o multimodal de manera coherente y adecuada en diferentes ámbitos y contextos y con diferentes propósitos comunicativos.",
-                contribution: "Contribuiremos a su adquisición mediante la lectura y la comprensión de distintos textos, cuentos y poesías, tanto para la interpretación vocal (trabajando aspectos relacionados con la técnica vocal: articulación, entonación, dicción…) como para las labores de investigación: descifrando pistas, redactando informes, elaborando los guiones para los reportajes de la radio escolar o las noticias para el periódico del centro. Estaremos fomentando la alfabetización mediática e informacional, mejorando la expresión oral y escrita y ampliando tanto el vocabulario general como el específicamente musical.",
+                contribution: "Contribuiremos a su adquisición mediante la lectura y la comprensión de distintos textos, cuentos y poesías, tanto para la interpretación vocal (trabajando aspectos relacionados con la técnica vocal: articulación, entonación, dicción…) como para las labores de investigación: descifrando pistas, redactando informes, elaborando los guiones para los reportajes de la radio escolar o las noticias para el periódico del centro. Estaremos fomentando la alfabetización mediática e informacional, mejorando la expresión oral y escrita y consiguiendo un vocabulario general y específicamente musical más amplio.",
                 icon: "message-square",
                 color: "emerald"
             },
@@ -443,7 +443,7 @@
                 code: "CPSAA",
                 name: "Competencia Personal, Social y de Aprender a Aprender",
                 text: "La competencia personal, social y de aprender a aprender implica la capacidad de reflexionar sobre uno mismo para autoconocerse, aceptarse y promover un crecimiento personal constante; gestionar el tiempo y la información eficazmente; colaborar con otros de forma constructiva; mantener la resiliencia; y gestionar el aprendizaje a lo largo de la vida.",
-                contribution: "Como lenguaje artístico, la música, a partir de la audición and la interpretación musical, favorece el reconocimiento, la expresión y la regulación de las emociones, y se constituye en este sentido como una herramienta fundamental para la educación emocional de nuestros alumnos y alumnas. Por otro lado, la propia dinámica de detectives musicales exige que el alumnado organize su propio plan de trabajo, reflexione sobre sus procesos de investigación (metacognición) y gestione la frustración frente a enigmas complejos, consolando su resiliencia y autoaprendizaje.",
+                contribution: "Como lenguaje artístico, la música, a partir de la audición and la interpretación musical, favorece el reconocimiento, la expresión y la regulación de las emociones, y se constituye en este sentido como una herramienta fundamental para la educación emocional de nuestros alumnos y alumnas. Por otro lado, la propia dinámica de detectives musicales exige que el alumnado organize su propio plan de trabajo, reflexione sobre sus procesos de investigación (metacognición) y gestione la frustración frente a enigmas complejos, consolidando su resiliencia y autoaprendizaje.",
                 icon: "heart",
                 color: "rose"
             },
@@ -494,12 +494,10 @@
         const CONTENIDOS = [
             { id: "A1", apartado: "A", text: "<strong>Propuestas artísticas</strong> de diferentes corrientes estéticas, procedencias y épocas, producidas por creadores y creadoras locales, regionales, nacionales e internacionales." },
             { id: "A2", apartado: "A", text: "<strong>Recepción y apreciación</strong> de obras artísticas." },
-            // Corregido "in la recepción" por "en la recepción" (Apt. A3)
             { id: "A3", apartado: "A", text: "<strong>Normas de comportamiento y actitud</strong> en la recepción de propuestas artísticas musicales en diferentes lugares. El <strong>silencio</strong> como elemento y condición indispensable para el mantenimiento de la atención durante la recepción y la práctica musical." },
             { id: "A4", apartado: "A", text: "<strong>Vocabulario específico</strong> de la música y las artes escénicas." },
             { id: "A5", apartado: "A", text: "<strong>Recursos digitales</strong> de uso común para la música y las artes escénicas." },
             { id: "A6", apartado: "A", text: "<strong>Análisis</strong> de obras artísticas." },
-            // Corregido "interpretation" por "interpretación" (Apt. B1)
             { id: "B1", apartado: "B", text: "<strong>Fases del proceso creativo</strong>: planificación, interpretación, experimentación y evaluación." },
             { id: "B2", apartado: "B", text: "<strong>Profesiones</strong> vinculadas con la música y las artes escénicas." },
             { id: "B3", apartado: "B", text: "<strong>Evaluación, respeto, interés y valoración</strong>, tanto por el proceso como por el producto final en producciones musicales y escénicas." },
@@ -957,7 +955,7 @@
             }
         }
 
-        // Cambio de pestañas (Tab switching SPA)
+        // Cambio de pestañas (Tab switching SPA) con actualización de URL dinámica
         function switchTab(tabId) {
             // Ocultar todas las secciones
             document.getElementById('section-objetivos').classList.add('hidden');
@@ -994,6 +992,11 @@
             // Cerrar menú móvil si estuviera abierto
             if (isMobileMenuOpen) {
                 toggleMobileMenu();
+            }
+
+            // Guardar el estado en el historial del navegador para enlaces profundos
+            if (window.location.hash !== `#${tabId}`) {
+                window.history.pushState(null, null, `#${tabId}`);
             }
 
             // Scroll suave hacia arriba
@@ -1072,6 +1075,15 @@
             }, 300);
         }
 
+        // Lógica de sincronización interactiva para el botón atrás/adelante del navegador
+        window.onpopstate = function() {
+            const hash = window.location.hash.substring(1) || 'objetivos';
+            const pestañasValidas = ['objetivos', 'competencias', 'relaciones', 'secuenciacion'];
+            if (pestañasValidas.includes(hash)) {
+                switchTab(hash);
+            }
+        };
+
         // 5. INICIALIZACIÓN DE LA PÁGINA
         window.onload = function() {
             // Generar todos los contenidos de la SPA
@@ -1079,6 +1091,16 @@
             generateCompetencias();
             generateRelaciones();
             renderSecuenciacionTable();
+
+            // Lector de enlaces profundos (Deep Linking) al cargar la página
+            const hash = window.location.hash.substring(1);
+            const pestañasValidas = ['objetivos', 'competencias', 'relaciones', 'secuenciacion'];
+            if (hash && pestañasValidas.includes(hash)) {
+                switchTab(hash);
+            } else {
+                // Forzar el hash por defecto en la barra de direcciones al entrar
+                window.history.replaceState(null, null, '#objetivos');
+            }
         };
     </script>
 </body>
