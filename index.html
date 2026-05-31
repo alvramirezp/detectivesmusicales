@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuartel General del Detective Musical - Programación Didáctica</title>
+    <!-- Tailwind CSS para Estilos Modernos y Responsivos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons para una iconografía espectacular -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        detective: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            accent: '#e0f2fe',
+                            gold: '#d97706',
+                            crimson: '#991b1b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Geist', 'Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Animaciones para transiciones fluidas */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8s); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .accordion-content {
+            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+        }
+        /* Ocultar barra de scroll de forma elegante */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- CABECERA DEL DEPARTAMENTO -->
+    <header class="bg-gradient-to-r from-detective-900 to-detective-800 text-white shadow-md border-b-4 border-amber-500 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logotipo e Hilo Conductor -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-amber-500 p-2.5 rounded-lg shadow-inner text-detective-900 flex items-center justify-center">
+                        <i data-lucide="search" class="w-6 h-6 stroke-[2.5]"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-extrabold tracking-tight flex items-center gap-1.5">
+                            DETECTIVES MUSICALES <span class="text-xs bg-amber-500/20 text-amber-400 font-medium px-2 py-0.5 rounded-full border border-amber-500/30">Música y Danza</span>
+                        </h1>
+                        <p class="text-xs text-slate-300 font-medium">3er Ciclo de Educación Primaria • Comunidad de Madrid</p>
+                    </div>
+                </div>
+
+                <!-- Navegación de Escritorio - Ajustado a xl (1280px) para evitar saturación en pantallas medianas -->
+                <nav class="hidden xl:flex space-x-1">
+                    <button onclick="switchTab('objetivos')" id="tab-btn-objetivos" class="tab-btn px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center gap-2 text-amber-400 bg-slate-800/80 border border-amber-500/30">
+                        <i data-lucide="target" class="w-4 h-4"></i> Objetivos de la etapa
+                    </button>
+                    <button onclick="switchTab('competencias')" id="tab-btn-competencias" class="tab-btn px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i data-lucide="award" class="w-4 h-4"></i> Competencias Clave
+                    </button>
+                    <button onclick="switchTab('relaciones')" id="tab-btn-relaciones" class="tab-btn px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i data-lucide="git-fork" class="w-4 h-4"></i> Relaciones curriculares
+                    </button>
+                    <button onclick="switchTab('secuenciacion')" id="tab-btn-secuenciacion" class="tab-btn px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i data-lucide="folder-search" class="w-4 h-4"></i> Secuenciación de contenidos
+                    </button>
+                </nav>
+
+                <!-- Botón de Menú de Móvil - Ajustado a xl (1280px) para que sustituya a los botones en resoluciones medianas e intermedias -->
+                <div class="xl:hidden">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2.5 rounded-md text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Abrir Menú">
+                        <i data-lucide="menu" id="menu-icon-open" class="w-6 h-6"></i>
+                        <i data-lucide="x" id="menu-icon-close" class="w-6 h-6 hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú Desplegable de Móvil - Ajustado a xl -->
+        <div id="mobile-menu" class="hidden xl:hidden bg-slate-950 border-t border-slate-800 transition-all duration-300">
+            <div class="px-2 pt-2 pb-4 space-y-1 sm:px-3">
+                <button onclick="switchTab('objetivos')" id="mobile-tab-btn-objetivos" class="w-full text-left px-4 py-3 rounded-lg text-base font-semibold flex items-center gap-3 text-amber-400 bg-slate-900 border-l-4 border-amber-500">
+                    <i data-lucide="target" class="w-5 h-5"></i> Objetivos de la etapa
+                </button>
+                <button onclick="switchTab('competencias')" id="mobile-tab-btn-competencias" class="w-full text-left px-4 py-3 rounded-lg text-base font-semibold flex items-center gap-3 text-slate-300 hover:bg-slate-900">
+                    <i data-lucide="award" class="w-5 h-5"></i> Competencias Clave
+                </button>
+                <button onclick="switchTab('relaciones')" id="mobile-tab-btn-relaciones" class="w-full text-left px-4 py-3 rounded-lg text-base font-semibold flex items-center gap-3 text-slate-300 hover:bg-slate-900">
+                    <i data-lucide="git-fork" class="w-5 h-5"></i> Relaciones curriculares
+                </button>
+                <button onclick="switchTab('secuenciacion')" id="mobile-tab-btn-secuenciacion" class="w-full text-left px-4 py-3 rounded-lg text-base font-semibold flex items-center gap-3 text-slate-300 hover:bg-slate-900">
+                    <i data-lucide="folder-search" class="w-5 h-5"></i> Secuenciación de contenidos
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CUERPO PRINCIPAL DEL CASO -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ============================================== -->
+        <!-- SECCIÓN 1: OBJETIVOS DE ETAPA (CONTRIBUCIÓN) -->
+        <!-- ============================================== -->
+        <section id="section-objetivos" class="fade-in space-y-6">
+            <div class="border-b border-slate-200 pb-3">
+                <h3 class="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+                    <i data-lucide="target" class="text-amber-500 w-7 h-7"></i> 1. Contribución a los Objetivos de la etapa
+                </h3>
+                <p class="text-slate-500 text-sm mt-1">¿Cómo contribuye Detectives Musicales a la consecución de los objetivos de Educación Primaria?</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="grid-objetivos">
+                <!-- Las tarjetas de objetivos se generarán dinámicamente mediante JS -->
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- SECCIÓN 2: COMPETENCIAS CLAVE (CONTRIBUCIÓN) -->
+        <!-- ============================================== -->
+        <section id="section-competencias" class="fade-in space-y-6 hidden">
+            <div class="border-b border-slate-200 pb-3">
+                <h3 class="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+                    <i data-lucide="award" class="text-blue-500 w-7 h-7"></i> 2. Contribución a las Competencias Clave
+                </h3>
+                <p class="text-slate-500 text-sm mt-1">¿Cómo contribuye Detectives Musicales a la adquisición de las competencias clave?</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="grid-competencias">
+                <!-- Las tarjetas de competencias se generarán dinámicamente mediante JS -->
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- SECCIÓN 3: RELACIÓN DE OBJETIVOS Y COMPETENCIAS -->
+        <!-- ============================================== -->
+        <section id="section-relaciones" class="fade-in space-y-6 hidden">
+            <div class="border-b border-slate-200 pb-3">
+                <h3 class="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+                    <i data-lucide="git-fork" class="text-indigo-500 w-7 h-7"></i> 3. Relaciones curriculares
+                </h3>
+                <p class="text-slate-500 text-sm mt-1">Mapa de interconexión: relación de las competencias clave con los objetivos de la etapa</p>
+            </div>
+
+            <!-- Tabla Responsiva Adaptada -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <!-- Vista en Escritorio y Tableta -->
+                <div class="hidden md:block overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-800 text-slate-100 text-sm font-bold border-b border-slate-700">
+                                <th class="py-4 px-6 w-1/3">Competencia Clave</th>
+                                <th class="py-4 px-6 w-2/3">Objetivos de la etapa Vinculados (Pulsa para ver detalle)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100" id="table-relaciones-body">
+                            <!-- Filas generadas dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Vista Responsiva de Móvil (Transformación a tarjetas compactas) -->
+                <div class="md:hidden divide-y divide-slate-100" id="cards-relaciones-movil">
+                    <!-- Cards móviles generadas dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- SECCIÓN 4: SECUENCIACIÓN DE CONTENIDOS -->
+        <!-- ============================================== -->
+        <section id="section-secuenciacion" class="fade-in space-y-6 hidden">
+            <!-- Encabezado de la Sección -->
+            <div class="border-b border-slate-200 pb-3">
+                <h3 class="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+                    <i data-lucide="folder-search" class="text-emerald-500 w-7 h-7"></i> 4. Secuenciación de contenidos
+                </h3>
+                <p class="text-slate-500 text-sm mt-1">Matriz de secuenciación de los contenidos curriculares a lo largo de las Unidades de Programación Didáctica (UPD).</p>
+            </div>
+
+            <!-- 1. TABLA MATRIZ DE CONTENIDOS -->
+            <div class="space-y-2">
+                <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+                    <!-- Limitación de altura para fijar las cabeceras vertical y horizontalmente en md breakpoints -->
+                    <div class="overflow-x-auto overflow-y-auto max-h-[650px] relative">
+                        <table class="w-full text-left border-collapse min-w-[3420px] table-fixed">
+                            <thead>
+                                <tr class="bg-slate-800 text-slate-100 text-xs font-bold border-b border-slate-700">
+                                    <!-- Columna de Apartado (Sticky) - Ancho ajustado a 110px de forma fija y sticky coordinado -->
+                                    <th class="py-4 px-2 w-[110px] min-w-[110px] max-w-[110px] md:sticky md:top-0 md:left-0 bg-slate-800 md:z-40 border-r border-slate-700 text-center shadow-[2px_0_5px_rgba(0,0,0,0.15)]">Apartado</th>
+                                    <!-- Columna de Contenido (Sticky) - Desplazada exactamente a left-[110px] y sticky coordinado -->
+                                    <th class="py-4 px-4 w-[320px] min-w-[320px] max-w-[320px] md:sticky md:top-0 md:left-[110px] bg-slate-800 md:z-40 border-r border-slate-700 shadow-[4px_0_8px_rgba(0,0,0,0.2)]">Contenido Curricular</th>
+                                    <!-- 14 Columnas de UPD con cabeceras y títulos completos con sticky superior -->
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 1<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El caso del instrumento que cruzó el océano</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 2<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El misterio de la leyenda del eco eterno</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 3<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El enigma del metrónomo de Beethoven</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 4<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El caso de la voz misteriosa</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 5<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El enigma de las emociones desaparecidas</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 6<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El caso de los sonidos perdidos</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 7<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El misterioso mensaje musical oculto</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 8<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El caso del instrumento desaparecido</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 9<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El enigma del teatro encantado</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 10<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El misterio del duende flamenco</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 11<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El misterio del guitarrista de blues</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 12<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El caso del autor invisible</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 13<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El secreto del fabricante de instrumentos</span></th>
+                                    <th class="py-4 px-3 text-center w-[210px] text-[11px] leading-tight sticky top-0 bg-slate-800 z-30 border-b border-slate-700">UPD 14<br><span class="text-[9.5px] font-normal text-slate-300 block mt-1.5 leading-tight">El misterio tras las ondas sonoras</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-xs" id="table-secuenciacion-body">
+                                <!-- Filas generadas dinámicamente mediante JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="text-right text-xs text-slate-400 italic">Desliza horizontalmente la tabla hacia la derecha para consultar la secuenciación de las 14 unidades de programación.</div>
+            </div>
+
+            <!-- 2. PANEL DE HERRAMIENTAS -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <!-- Buscador -->
+                    <div class="relative w-full md:w-96">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i data-lucide="search" class="w-5 h-5"></i>
+                        </span>
+                        <input type="text" id="search-input" oninput="filterContents()" placeholder="Buscar contenido curricular o palabra clave..." class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm placeholder-slate-400">
+                    </div>
+
+                    <!-- Filtros Adaptables por Apartados - Sincronizados también con xl (1280px) para consistencia -->
+                    <div class="w-full md:w-auto">
+                        <!-- Selector Desplegable para pantallas pequeñas/medianas (visible por defecto, oculto en xl) -->
+                        <div class="block xl:hidden">
+                            <select id="filter-select-apartado" onchange="filterByApartado(this.value)" class="w-full bg-slate-50 border border-slate-300 text-slate-700 py-2.5 px-4 pr-10 rounded-lg text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 cursor-pointer">
+                                <option value="todos">Todos los Apartados</option>
+                                <option value="A">A. Recepción y análisis</option>
+                                <option value="B">B. Creación e interpretación</option>
+                                <option value="C">C. Música y artes escénicas</option>
+                            </select>
+                        </div>
+
+                        <!-- Botones Horizontales para pantallas grandes (ocultos por defecto, visibles en xl) -->
+                        <div class="hidden xl:flex flex-wrap gap-2 shrink-0">
+                            <button onclick="filterByApartado('todos')" id="filter-btn-todos" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-sm border border-amber-400">Todos los Apartados</button>
+                            <button onclick="filterByApartado('A')" id="filter-btn-A" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-300">A. Recepción y análisis</button>
+                            <button onclick="filterByApartado('B')" id="filter-btn-B" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-300">B. Creación e interpretación</button>
+                            <button onclick="filterByApartado('C')" id="filter-btn-C" class="filter-btn px-4 py-2 rounded-lg text-xs font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-300">C. Música y artes escénicas</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- EXPEDIENTE FLOTANTE (MODAL GLOBAL PARA DETALLES DE OBJETIVOS) -->
+    <div id="objective-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden" onclick="closeModal(event)">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border-2 border-amber-500 overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="modal-container" onclick="event.stopPropagation()">
+            <!-- Cabecera del expediente -->
+            <div class="bg-slate-800 text-white px-6 py-4 flex items-center justify-between border-b border-slate-700">
+                <h4 class="font-bold text-base sm:text-lg text-amber-400" id="modal-obj-title">a) Valores y normas de convivencia</h4>
+                <button onclick="closeModal()" class="text-slate-300 hover:text-white bg-slate-700 hover:bg-slate-600 p-1.5 rounded-lg transition-colors shrink-0 ml-4">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Contenido -->
+            <div class="p-6 text-slate-700 leading-relaxed font-serif text-sm sm:text-base" id="modal-obj-text">
+                Contenido oficial...
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONCRECIÓN CURRICULAR DE LA MATRIZ (CELDA SELECCIONADA) -->
+    <div id="matrix-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden" onclick="closeMatrixModal()">
+        <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border-2 border-emerald-500 overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="matrix-modal-container" onclick="event.stopPropagation()">
+            <!-- Cabecera sin la tarjeta/insignia pequeña duplicada -->
+            <div class="bg-slate-800 text-white px-6 py-4 flex items-center justify-between border-b border-slate-700">
+                <h4 class="font-bold text-sm sm:text-base text-emerald-400" id="matrix-modal-upd-name">Título de la Unidad</h4>
+                <button onclick="closeMatrixModal()" class="text-slate-300 hover:text-white bg-slate-700 hover:bg-slate-600 p-1.5 rounded-lg transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Cuerpo Simplificado y Sintético -->
+            <div class="p-6 space-y-4 text-sm">
+                <!-- Contenido Curricular -->
+                <div class="space-y-1">
+                    <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider" id="matrix-modal-content-code">Contenido Curricular</h5>
+                    <p class="text-slate-800 font-medium leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100 font-sans shadow-sm" id="matrix-modal-content-text">Texto normativo...</p>
+                </div>
+                <!-- Propuesta Didáctica -->
+                <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 flex gap-3 shadow-sm">
+                    <div class="text-emerald-700"><i data-lucide="compass" class="w-5 h-5 shrink-0 mt-0.5"></i></div>
+                    <div>
+                        <h6 class="text-xs font-extrabold text-emerald-900 uppercase tracking-wide">Propuesta Didáctica</h6>
+                        <p class="text-xs text-emerald-800 mt-1 leading-relaxed font-sans" id="matrix-modal-propuesta">Ejemplo práctico listo para usar...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
+            <p class="text-sm">Diseñado por y para docentes en la Comunidad de Madrid • Programación LOMLOE de Música y Danza</p>
+        </div>
+    </footer>
+
+    <!-- BASE DE DATOS Y LÓGICA DE INTERACTIVIDAD -->
+    <script>
+        // 1. BASE DE DATOS DEL CURRÍCULO MADRID (LOMLOE)
+        const OBJETIVOS = {
+            "a": {
+                title: "a) Valores y normas de convivencia",
+                text: "Conocer y apreciar los valores y las normas de convivencia, aprender a obrar de acuerdo con ellas de forma empática, prepararse para el ejercicio activo de la ciudadanía y respetar los derechos humanos, así como el pluralismo propio de una sociedad democrática.",
+                contribution: "A partir del respeto a los compañeros y compañeras, así como a la persona que asuma la dirección en los conjuntos vocales e instrumentales. La valoración del silencio como punto de partida para la audición o la interpretación musical.",
+                icon: "users"
+            },
+            "b": {
+                title: "b) Hábitos de trabajo individual y de equipo",
+                text: "Desarrollar hábitos de trabajo individual y de equipo, de esfuerzo y de responsabilidad en el estudio, así como actitudes de confianza en sí mismo, sentido crítico, initiative personal, curiosidad, interés y creatividad en el aprendizaje, y espíritu emprendedor.",
+                contribution: "A través de la interpretación instrumental, vocal y corporal, tanto de manera individual como colectiva, adquiriendo distintos roles y responsabilidades, colaborando para la consecución de un producto final satisfactorio.",
+                icon: "clipboard-list"
+            },
+            "c": {
+                title: "c) Resolución pacífica de conflictos",
+                text: "Adquirir habilidades para la resolución pacífica de conflictos y la prevención de la violencia, que les permitan desenvolverse con autonomía en el ámbito escolar y familiar, así como en los grupos sociales con los que se relacionan.",
+                contribution: "Mediante la integración de las aportaciones propias o ajenas en la elaboración de propuestas artísticas colaborativas, desde la empatía, la comunicación asertiva, el reconocimiento de las emociones y la gestión y tolerancia a la frustración.",
+                icon: "heart-handshake"
+            },
+            "d": {
+                title: "d) Respeto a la diversidad",
+                text: "Conocer, comprender y respetar las diferentes culturas y las diferencias entre las personas, la igualdad de derechos y oportunidades de hombres y mujeres y la no discriminación de personas por motivos de etnia, orientación o identidad sexual, religión o creencias, discapacidad u otras condiciones.",
+                contribution: "A través del conocimiento de la música de otras culturas, mediante canciones tradicionales y populares, entendiendo la música como expresión artística propia de una sociedad enmarcada en una época y una cultura determinada. Además, mediante el rechazo de cualquier estereotipo de género en la asunción de roles interpretativos.",
+                icon: "globe"
+            },
+            "e": {
+                title: "e) Lengua castellana",
+                text: "Conocer y utilizar de manera apropiada la lengua castellana y, si la hubiere, la lengua cooficial de la comunidad autónoma y desarrollar hábitos de lectura.",
+                contribution: "A partir de la lectura introductoria y el planteamiento inicial de cada caso, de los textos de cuentos, canciones, poesías, textos científicos y de conocimiento musicológico, así como a través de determinadas cuestiones de técnica vocal: respiración, articulación, dicción…",
+                icon: "book-open"
+            },
+            "f": {
+                title: "f) Lengua extranjera",
+                text: "Adquirir en, al menos, una lengua extranjera la competencia comunicativa básica que les permita expresar y comprender mensajes sencillos y desenvolverse en situaciones cotidianas.",
+                contribution: "Mediante la audición y la interpretación de canciones en distintos idiomas para la resolución de los casos internacionales.",
+                icon: "languages"
+            },
+            "g": {
+                title: "g) Competencias matemáticas",
+                text: "Desarrollar las competencias matemáticas básicas e iniciarse en la resolución de problemas que requieran la realización de operaciones elementales de cálculo, conocimientos geométricos y estimaciones, así como ser capaces de aplicarlos a las situaciones de su vida cotidiana.",
+                contribution: "La utilización del sistema de grafía convencional: el lenguaje musical, a través de la duración de las figuras musicales y sus equivalencias, tanto en lo relativo a la audición como en la interpretación o la creación musical.",
+                icon: "binary"
+            },
+            "h": {
+                title: "h) Ciencias, Geografía, Historia y Cultura",
+                text: "Conocer los aspectos fundamentales de las Ciencias de la Naturaleza, las Ciencias Sociales, la Geografía, la Historia y la Cultura.",
+                contribution: "A partir de las cualidades del sonido y sus fundamentos físicos como materia prima de la música. La historia y la geografía se integran de forma natural al contextualizar las obras musicales.",
+                icon: "landmark"
+            },
+            "i": {
+                title: "i) Competencias tecnológicas",
+                text: "Desarrollar las competencias tecnológicas básicas e iniciarse en su utilización, para el aprendizaje, desarrollando un espíritu crítico ante su funcionamiento y los mensajes que reciben y elaboran.",
+                contribution: "Mediante la utilización herramientas digitales de forma eficaz y eficiente bajo la guía y la supervisión docente, así como el acceso a material y actividades de ampliación o para la creación y la composición musical.",
+                icon: "laptop"
+            },
+            "j": {
+                title: "j) Expresión artística",
+                text: "Utilizar diferentes representaciones y expresiones artísticas e iniciarse en la construcción de propuestas visuales y audiovisuales.",
+                contribution: "Mediante la creación e interpretación instrumental, vocal y corporal, así como a través de la elaboración de propuestas creativas y productos finales para la comunicación de los resultados de las investigaciones.",
+                icon: "palette"
+            },
+            "k": {
+                title: "k) Higiene, salud y educación física",
+                text: "Valorar la higiene y la salud, aceptar el propio cuerpo y el de los otros, respetar las diferencias y utilizar la educación física, el deporte y la alimentación como medios para favorecer el desarrollo personal y social.",
+                contribution: "En base al desarrollo de la técnica vocal (respiración, calentamiento, proyección…) and de la técnica instrumental (postura corporal) para la prevención de problemas y enfermedades.",
+                icon: "activity"
+            },
+            "m": {
+                title: "m) Capacidades afectivas",
+                text: "Desarrollar sus capacidades afectivas en todos los ámbitos de la personalidad and en sus relaciones con las demás personas, así como una attitude contraria a la violencia, a los prejuicios de cualquier tipo y a los estereotipos sexistas.",
+                contribution: "A partir de la valoración de la música como lenguaje universal y como medio para la expresión de ideas, sentimientos and emociones, favoreciendo el reconocimiento de estas y contribuyendo al desarrollo de la inteligencia emocional.",
+                icon: "smile"
+            }
+        };
+
+        const COMPETENCIAS = {
+            "ccl": {
+                code: "CCL",
+                name: "Competencia en Comunicación Lingüística",
+                text: "La competencia en comunicación lingüística supone interactuar de forma oral, escrita, signada o multimodal de manera coherente y adecuada en diferentes ámbitos y contextos y con diferentes propósitos comunicativos.",
+                contribution: "Contribuiremos a su adquisición mediante la lectura y la comprensión de distintos textos, cuentos y poesías, tanto para la interpretación vocal (trabajando aspectos relacionados con la técnica vocal: articulación, entonación, dicción…) como para las labores de investigación: descifrando pistas, redactando informes, elaborando los guiones para los reportajes de la radio escolar o las noticias para el periódico del centro. Estaremos fomentando la alfabetización mediática e informacional, mejorando la expresión oral y escrita y ampliando tanto el vocabulario general como el específicamente musical.",
+                icon: "message-square",
+                color: "emerald"
+            },
+            "cp": {
+                code: "CP",
+                name: "Competencia Plurilingüe",
+                text: "La competencia plurilingüe implica utilizar distintas lenguas, orales o signadas, de forma apropiada y eficaz para el aprendizaje y la comunicación.",
+                contribution: "La resolución de los casos internacionales requerirá en ocasiones la audición, análisis e interpretación de canciones en diferentes idiomas, permitiendo al alumnado acercarse a otras lenguas de manera lúdica y musical y contribuyendo de esta manera al desarrollo de la competencia.",
+                icon: "languages",
+                color: "teal"
+            },
+            "stem": {
+                code: "STEM",
+                name: "Competencia Matemática y Competencia en Ciencia, Technology e Ingeniería",
+                text: "La competencia matemática y competencia en ciencia, tecnología e ingeniería entraña la comprensión del mundo utilizando los métodos científicos, el pensamiento y representación matemáticos, la tecnología y los métodos de la ingeniería para transformar el entorno de forma comprometida, responsable y sostenible.",
+                contribution: "Estaremos contribuyendo al trabajar las cualidades del sonido como materia prima de la música, al descifrar códigos: ritmos, compases, equivalencias, melodías, intervalos, escalas… Estas actividades, planteadas en ocasiones como criptogramas musicales, favorecen el razonamiento lógico, el cálculo y la capacidad de abstracción del alumnado.",
+                icon: "binary",
+                color: "violet"
+            },
+            "cd": {
+                code: "CD",
+                name: "Competencia Digital",
+                text: "La competencia digital implica el uso seguro, saludable, sostenible, crítico y responsable de las tecnologías digitales para el aprendizaje, para el trabajo y para la participación en la sociedad, así como la interacción con estas.",
+                contribution: "Se contribuye a través de la utilización de la tecnología de forma segura y crítica como herramienta para visualizar o mostrar obras y producciones musicales. Se desarrolla, asimismo, la competencia digital a partir de la utilización de herramientas y aplicaciones informáticas para la creación y la composición musical.",
+                icon: "laptop",
+                color: "sky"
+            },
+            "cpsaa": {
+                code: "CPSAA",
+                name: "Competencia Personal, Social y de Aprender a Aprender",
+                text: "La competencia personal, social y de aprender a aprender implica la capacidad de reflexionar sobre uno mismo para autoconocerse, aceptarse y promover un crecimiento personal constante; gestionar el tiempo y la información eficazmente; colaborar con otros de forma constructiva; mantener la resiliencia; y gestionar el aprendizaje a lo largo de la vida.",
+                contribution: "Como lenguaje artístico, la música, a partir de la audición and la interpretación musical, favorece el reconocimiento, la expresión y la regulación de las emociones, y se constituye en este sentido como una herramienta fundamental para la educación emocional de nuestros alumnos y alumnas. Por otro lado, la propia dinámica de detectives musicales exige que el alumnado organize su propio plan de trabajo, reflexione sobre sus procesos de investigación (metacognición) y gestione la frustración frente a enigmas complejos, consolando su resiliencia y autoaprendizaje.",
+                icon: "heart",
+                color: "rose"
+            },
+            "cc": {
+                code: "CC",
+                name: "Competencia Ciudadana",
+                text: "La competencia ciudadana contribuye a que alumnos y alumnas puedan ejercer una ciudadanía responsable y participar plenamente in la vida social y cívica, basándose en la comprensión de los conceptos y las estructuras sociales, económicas, jurídicas y políticas, así como en el conocimiento de los acontecimientos mundiales y el compromiso activo con la sostenibilidad y el logro de una ciudadanía mundial.",
+                contribution: "La interpretación instrumental, vocal y corporal en grupo, así como la creación musical, supone un trabajo en equipo que requiere de la colaboración y la participación de todos, asumiendo las responsabilidades individuales y las normas grupales, y permitiendo experimentar la satisfacción del éxito colectivo basada en el esfuerzo común. Por otro lado, para la resolución de los casos y la elaboración del producto final, es imprescindible el diálogo, la escucha activa y el respeto a la diversidad de opiniones.",
+                icon: "user-check",
+                color: "indigo"
+            },
+            "ce": {
+                code: "CE",
+                name: "Competencia Emprendedora",
+                text: "La competencia emprendedora implica desarrollar un enfoque vital dirigido a actuar sobre oportunidades e ideas, utilizando los conocimientos específicos necesarios para generar resultados de valor para otras personas.",
+                contribution: "A partir de la improvisación y la creación musical se plantea la necesidad de generar ideas artísticas y creativas con un criterio propio. Además, para resolver los casos planteados, el alumnado debe ser capaz de plantearse preguntas, formular hipótesis, diseñar su propio plan de investigación y encontrar soluciones originales a los retos propuestos. Este proceso de proactividad, planificación y gestión de sus propios proyectos desarrolla un espíritu emprendedor que va más allá del ámbito puramente artístico.",
+                icon: "lightbulb",
+                color: "amber"
+            },
+            "ccec": {
+                code: "CCEC",
+                name: "Competencia en Conciencia y Expresión Culturales",
+                text: "La competencia en conciencia y expresión culturales supone comprender y respetar el modo en que las ideas, las opiniones, los sentimientos y las emociones se expresan y se comunican de forma creativa en distintas culturas y por medio de una amplia gama de manifestaciones artísticas y culturales.",
+                contribution: "Resulta prioritario en el área de Educación Artística el desarrollo de la competencia, principalmente a través del conocimiento musicológico necesario para la resolución de los casos planteados. A partir de este conocimiento, de la audición y la interpretación musical, estaremos dotando al alumnado de las herramientas necesarias para comprender, analizar, valorar, y, por tanto, disfrutar de las distintas obras y manifestaciones artísticas y culturales de su entorno próximo, así como de otras culturas.",
+                icon: "music",
+                color: "fuchsia"
+            }
+        };
+
+        const RELACIONES = [
+            { comp: "ccl", objetivos: ["e"] },
+            { comp: "cp", objetivos: ["f"] },
+            { comp: "stem", objetivos: ["g", "h"] },
+            { comp: "cd", objetivos: ["i"] },
+            { comp: "cpsaa", objetivos: ["b", "m"] },
+            { comp: "cc", objetivos: ["a", "c", "d"] },
+            { comp: "ce", objetivos: ["b"] },
+            { comp: "ccec", objetivos: ["j"] }
+        ];
+
+        // 2. NUEVA BASE DE DATOS DE SECUENCIACIÓN: APARTADOS, CONTENIDOS Y 14 UPDs (ESPIRAL INTERACTIVO)
+        const APARTADOS = {
+            "A": "A. Recepción y análisis",
+            "B": "B. Creación e interpretación",
+            "C": "C. Música y artes escénicas"
+        };
+
+        const CONTENIDOS = [
+            { id: "A1", apartado: "A", text: "<strong>Propuestas artísticas</strong> de diferentes corrientes estéticas, procedencias y épocas, producidas por creadores y creadoras locales, regionales, nacionales e internacionales." },
+            { id: "A2", apartado: "A", text: "<strong>Recepción y apreciación</strong> de obras artísticas." },
+            // Corregido "in la recepción" por "en la recepción" (Apt. A3)
+            { id: "A3", apartado: "A", text: "<strong>Normas de comportamiento y actitud</strong> en la recepción de propuestas artísticas musicales en diferentes lugares. El <strong>silencio</strong> como elemento y condición indispensable para el mantenimiento de la atención durante la recepción y la práctica musical." },
+            { id: "A4", apartado: "A", text: "<strong>Vocabulario específico</strong> de la música y las artes escénicas." },
+            { id: "A5", apartado: "A", text: "<strong>Recursos digitales</strong> de uso común para la música y las artes escénicas." },
+            { id: "A6", apartado: "A", text: "<strong>Análisis</strong> de obras artísticas." },
+            // Corregido "interpretation" por "interpretación" (Apt. B1)
+            { id: "B1", apartado: "B", text: "<strong>Fases del proceso creativo</strong>: planificación, interpretación, experimentación y evaluación." },
+            { id: "B2", apartado: "B", text: "<strong>Profesiones</strong> vinculadas con la música y las artes escénicas." },
+            { id: "B3", apartado: "B", text: "<strong>Evaluación, respeto, interés y valoración</strong>, tanto por el proceso como por el producto final en producciones musicales y escénicas." },
+            { id: "B4", apartado: "B", text: "<strong>Uso responsable de bancos de imágenes y sonidos</strong>: respeto a las licencias de uso y distribución de contenidos generados por otros. <strong>Plagio</strong> y <strong>derechos de autor</strong>." },
+            { id: "C1", apartado: "C", text: "El <strong>sonido y sus cualidades</strong> (tono, duración, timbre e intensidad): identificación visual y auditiva, clasificación y representación de diversidad de sonidos y estructuras melódico-rítmicas a través de diferentes <strong>grafías</strong>." },
+            { id: "C2", apartado: "C", text: "La <strong>voz</strong> y los <strong>instrumentos musicales</strong>. Familias (viento, cuerda, percusión) y agrupaciones (coros, bandas, orquestas). Clasificación. Identificación visual y auditiva. Instrumentos digitales y no convencionales. <strong>Cotidiáfonos</strong>." },
+            { id: "C3", apartado: "C", text: "El <strong>carácter</strong>, el <strong>tempo</strong> y el <strong>compás</strong>, los <strong>géneros musicales</strong>, la <strong>textura</strong>, la <strong>armonía</strong> y la <strong>forma</strong> tras la escucha de obras musicales." },
+            { id: "C4", apartado: "C", text: "<strong>Práctica instrumental, vocal y corporal</strong>: experimentación, exploración creativa, interpretación, improvisación de piezas vocales e instrumentales de diferente época, estilos y culturas y composición a partir de sus posibilidades sonoras y expresivas de forma individual o en distintos agrupamientos, de acuerdo a su desarrollo evolutivo." },
+            { id: "C5", apartado: "C", text: "<strong>Construcción de instrumentos</strong>. Práctica instrumental." },
+            { id: "C6", apartado: "C", text: "<strong>Lenguajes musicales</strong>: conocimiento y aplicación de sus conceptos fundamentales en la interpretación y en la improvisación de propuestas musicales vocales e instrumentales que contengan procedimientos compositivos: repetición, imitación, variación y desarrollo. El <strong>silencio</strong> en la música como elemento fundamental." },
+            { id: "C7", apartado: "C", text: "<strong>Aplicaciones informáticas</strong> de grabación, edición de audio y edición de partituras: utilización en la audición, conocimiento, interpretación, grabación, reproducción, improvisación y creación de obras." },
+            { id: "C8", apartado: "C", text: "El <strong>cuerpo y sus posibilidades motrices, dramáticas y creativas</strong>: interés en la experimentación a través de ejecuciones individuales y grupales vinculadas con el movimiento, la <strong>danza</strong>, la dramatización y la representación teatral como medio de comunicación, expresión, diversión y fomento de la creatividad." },
+            { id: "C9", apartado: "C", text: "<strong>Técnicas básicas dramáticas y dancísticas</strong>. Nociones elementales. Lenguajes expresivos. Introducción a los métodos interpretativos. Improvisación guiada y creativa." },
+            { id: "C10", apartado: "C", text: "<strong>Capacidades expresivas y creativas</strong> de la expresión corporal y dramática." },
+            { id: "C11", apartado: "C", text: "<strong>Elementos</strong> de la representación y creación escénica." },
+            { id: "C12", apartado: "C", text: "Aproximación a los <strong>géneros escénicos</strong>. Valoración de la importancia de la interpretación dramática en el proceso artístico y del <strong>patrimonio cultural</strong> vinculado a las artes escénicas." }
+        ];
+
+        // BASE DE DATOS DE UNIDADES DIDÁCTICAS RESTAURADA PARA CORREGIR LA DEFINICIÓN
+        const UPDS = {
+            1: "UPD 1. El caso del instrumento que cruzó el océano",
+            2: "UPD 2. El misterio de la leyenda del eco eterno",
+            3: "UPD 3. El enigma del metrónomo de Beethoven",
+            4: "UPD 4. El caso de la voz misteriosa",
+            5: "UPD 5. El enigma de las emociones desaparecidas",
+            6: "UPD 6. El caso de los sonidos perdidos",
+            7: "UPD 7. El misterioso mensaje musical oculto",
+            8: "UPD 8. El caso del instrumento desaparecido",
+            9: "UPD 9. El enigma del teatro encantado",
+            10: "UPD 10. El misterio del duende flamenco",
+            11: "UPD 11. El misterio del guitarrista de blues",
+            12: "UPD 12. El caso del autor invisible",
+            13: "UPD 13. El secreto del fabricante de instrumentos",
+            14: "UPD 14. El misterio tras las ondas sonoras"
+        };
+
+        // 2. NUEVA BASE DE DATOS REAL DE CONEXIONES CÍCLICAS EN ESPIRAL (TEXTUAL E IMPRESCINDIBLE)
+        const CONEXIONES = {
+            "A1_2": { text: "A1. Propuestas artísticas de diferentes corrientes estéticas, procedencias y épocas…", prop: "Audición: desarrollar la escucha activa a partir de la audición La llorona." },
+            "A1_4": { text: "A1. Propuestas artísticas de diferentes corrientes estéticas, procedencias y épocas…", prop: "Audición: desarrollar la escucha activa a partir de la audición Alfonsina y el mar" },   
+            "A1_6": { text: "A1. Propuestas artísticas de diferentes corrientes estéticas, procedencias y épocas…", prop: "Audición: desarrollar la escucha activa a partir de El ritmo del silencio." },
+            "A1_7": { text: "A1. Propuestas artísticas de diferentes corrientes estéticas, procedencias y épocas…", prop: "Audición: desarrollar la escucha activa a partir de la audición Mamma mia." },
+            "A1_8": { text: "A1. Propuestas artísticas de diferentes corrientes estéticas, procedencias y épocas…", prop: "Audición: desarrollar la escucha activa a partir de la audición La vida es bella." },
+            "A1_12": { text: "A1. Propuestas artísticas de diferentes corrientes estéticas, procedencias y épocas…", prop: "Audición: desarrollar la escucha activa a partir de la audición Las panaderas." },
+            "A1_13": { text: "A1. Propuestas artísticas de diferentes corrientes estéticas, procedencias y épocas…", prop: "Audición: desarrollar la escucha activa a partir de la audición Tutu Gbovi." },
+            
+            "A2_3": { text: "A2. Recepción y apreciación de obras artísticas.", prop: "Audición: desarrollar la escucha activa a partir de la audición Oda a la alegría." },
+            "A2_5": { text: "A2. Recepción y apreciación de obras artísticas.", prop: "Audición: desarrollar la escucha activa a partir de El lagarto está llorando." },
+            
+            // Corregido "and actitud" por "y actitud" (Conexión A3_1)
+            "A3_1": { text: "A3. Normas de comportamiento y actitud en la recepción de propuestas artísticas y musicales en diferentes lugares…", prop: "Audición: desarrollar la escucha activa a partir de la audición Ala kinkirrin." },
+            
+            "A4_9": { text: "A4. Vocabulario específico de la música y las artes escénicas.", prop: "Audición: desarrollar la escucha activa a partir de El fantasma de la ópera." },
+            
+            "A5_14": { text: "A5. Recursos digitales de uso común para la música y las artes escénicas.", prop: "Audición: desarrollar la escucha activa a partir de la aplicación Spectrogram." },
+            
+            "A6_10": { text: "A6. Análisis de obras artísticas.", prop: "Audición: desarrollar la escucha activa a partir de la audición Los campanilleros." },
+            "A6_11": { text: "A6. Análisis de obras artísticas.", prop: "Audición: desarrollar la escucha activa a partir de See you later, alligator." },
+            
+            "B1_1": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar el mural colaborativo: el viaje musical." },
+            "B1_2": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar el mural colaborativo: mapa de evidencias." },
+            "B1_3": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar la noticia para comunicar los resultados." },
+            "B1_4": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar el reportaje para comunicar los resultados." },
+            "B1_5": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar el reportaje para comunicar los resultados." },
+            "B1_7": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar un código y un mensaje cifrado." },
+            "B1_8": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar un mural con un inventario musical." },
+            "B1_10": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar el reportaje para comunicar los resultados." },
+            "B1_11": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar el mural colaborativo con los géneros." },
+            "B1_13": { text: "B1. Fases del proceso creativo: planificación, interpretación, experimentación y evaluación.", prop: "Situación de aprendizaje: elaborar el informe técnico para el fabricante." },
+            
+            "B2_9": { text: "B2. Profesiones vinculadas con la música y las artes escénicas.", prop: "Situación de aprendizaje: elaborar el mural colaborativo del viaje musical." },
+            
+            "B3_14": { text: "B3. Evaluación, respeto, interés y valoración, tanto por el proceso como por el producto final…", prop: "Situación de aprendizaje: grabar el patrón y convertirlo a formato gráfico: Phonopaper." },
+            
+            "B4_6": { text: "B4. Uso responsable de bancos de imágenes y sonidos: respeto a las licencias de uso…", prop: "Situación de aprendizaje: crear un paisaje y un mapa sonoro colectivo." },
+            "B4_12": { text: "B4. Plagio y derechos de autor.", prop: "Situación de aprendizaje: elaborar el informe de defensa de la tradición." },
+            
+            "C1_5": { text: "C1. El sonido y sus cualidades: identificación visual y auditiva…", prop: "Conocimiento musicológico: conocer los parámetros musicales relacionados con las emociones." },
+            
+            "C2_1": { text: "C2. Los instrumentos musicales. Familias (cuerda). Clasificación. Identificación visual y auditiva.", prop: "Conocimiento musicológico: conocer los instrumentos de cuerda pulsada." },
+            "C2_4": { text: "C2. La voz. Agrupaciones. Clasificación. Identificación visual y auditiva.", prop: "Conocimiento musicológico: conocer la clasificación y agrupaciones vocales" },
+            "C2_8": { text: "C2. Los instrumentos musicales. Familias (viento, cuerda, percusión). Clasificación.", prop: "Conocimiento musicológico: conocer los instrumentos musicales y sus familias." },
+            "C2_13": { text: "C2. Los instrumentos musicales. Familias. Clasificación. Identificación visual y auditiva. Cotidiáfonos.", prop: "Conocimiento musicológico: conocer las familias de instrumentos y el elemento generador del sonido." },
+            "C2_14": { text: "C2. Los instrumentos musicales. Instrumentos digitales y no convencionales.", prop: "Conocimiento musicológico: conocer los instrumentos digitales." },
+            
+            "C3_2": { text: "C3. Los géneros musicales.", prop: "Conocimiento musicológico: conocer la música tradicional." },
+            "C3_3": { text: "C3. El tempo, el compás.", prop: "Conocimiento musicológico: conocer los compases y el tempo musical." },
+            "C3_10": { text: "C3. Los géneros musicales, la textura.", prop: "Conocimiento musicológico: conocer las principales facetas del flamenco." },
+            "C3_11": { text: "C3. Los géneros musicales, la armonía y la forma tras la escucha de obras musicales.", prop: "Conocimiento musicológico: conocer los géneros de música popular urbana." },
+            "C3_12": { text: "C3. Los géneros musicales.", prop: "Conocimiento musicológico: conocer las características de la música tradicional." },
+            
+            "C4_1": { text: "C4. Práctica vocal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar vocalmente la canción Ala kinkirrin." },
+            "C4_2": { text: "C4. Práctica instrumental, vocal y corporal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar vocalmente la canción La llorona. Interpretación instrumental: acompañar la canción La llorona. Interpretación corporal: utilizar el cuerpo como instrumento de expresión." },
+            "C4_3": { text: "C4. Práctica instrumental, vocal y corporal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar vocalmente la canción Día de alegría. Interpretación instrumental: acompañar la canción Día de alegría. Interpretación corporal: utilizar el cuerpo como instrumento de expresión." },
+            "C4_4": { text: "C4. Práctica instrumental, vocal y corporal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar la canción Alfonsina y el mar. Interpretación instrumental: acompañar la canción Alfonsina y el mar. Interpretación corporal: utilizar el cuerpo como instrumento de expresión." },
+            "C4_5": { text: "C4. Práctica instrumental, vocal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar la canción El lagarto está llorando. Interpretación instrumental: acompañar la canción El lagarto está llorando." },
+            "C4_6": { text: "C4. Práctica instrumental, vocal y corporal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar la canción El ritmo del silencio. Interpretación instrumental: acompañar El ritmo del silencio. Interpretación corporal: utilizar el cuerpo como instrumento de expresión." },
+            "C4_7": { text: "C4. Práctica instrumental, vocal y corporal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar vocalmente la canción Mamma mia. Interpretación instrumental: acompañar la canción Mamma mia. Interpretación corporal: utilizar el cuerpo como instrumento de expresión." },
+            "C4_8": { text: "C4. Práctica instrumental, vocal y corporal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar vocalmente la canción La vida es bella. Interpretación instrumental: acompañar la canción La vida es bella. Interpretación corporal: utilizar el cuerpo como instrumento de expresión." },
+            "C4_9": { text: "C4. Práctica instrumental, vocal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar la canción El fantasma de la ópera. Interpretación instrumental: acompañar El fantasma de la ópera." },
+            "C4_10": { text: "C4. Práctica instrumental, vocal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar la canción Los campanilleros. Interpretación instrumental: acompañar Los campanilleros." },
+            "C4_11": { text: "C4. Práctica instrumental, vocal y corporal: experimentación, exploration creativa, interpretación…", prop: "Interpretación vocal: interpretar la canción Hasta luego, cocodrilo. Interpretación instrumental: acompañar Hasta luego, cocodrilo. Interpretación corporal: utilizar el cuerpo como instrumento de expresión." },
+            "C4_12": { text: "C4. Práctica instrumental, vocal y corporal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar vocalmente la canción Las panaderas. Interpretación instrumental: acompañar la canción Las panaderas. Interpretación corporal: utilizar el cuerpo como instrumento de expresión." },
+            "C4_13": { text: "C4. Práctica vocal y corporal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: interpretar vocalmente la canción Tutu Gbovi. Interpretación corporal: utilizar el cuerpo como instrumento de expresión." },
+            "C4_14": { text: "C4. Práctica vocal: experimentación, exploración creativa, interpretación…", prop: "Interpretación vocal: crear una melodía sencilla para el patrón rítmico." },
+            
+            "C5_1": { text: "C5. Construcción de instrumentos. Práctica instrumental.", prop: "Interpretación instrumental: acompañar la canción Ala kinkirrin." },
+            "C5_13": { text: "C5. Construcción de instrumentos. Práctica instrumental.", prop: "Interpretación instrumental: acompañar la canción Tutu Gbovi." },
+            "C5_14": { text: "C5. Construcción de instrumentos. Práctica instrumental.", prop: "Interpretación instrumental: crear un instrumento digital y un patrón rítmico." },
+            
+            "C6_7": { text: "C6. Lenguajes musicales: conocimiento y aplicación de sus conceptos fundamentales…", prop: "Conocimiento musicológico: conocer el sistema de notación musical estándar." },
+            
+            "C7_6": { text: "C7. Aplicaciones informáticas de grabación y edición de audio…", prop: "Conocimiento musicológico: conocer las posibilidades comunicativas a través del sonido." },
+            
+            "C8_1": { text: "C8. El cuerpo y sus posibilidades motrices, dramáticas y creativas…", prop: "Interpretación corporal: interpretar la danza propuesta." },
+            "C8_5": { text: "C8. El cuerpo y sus posibilidades motrices, dramáticas y creativas…", prop: "Interpretación corporal: interpretar la coreografía propuesta." },
+            "C8_10": { text: "C8. El cuerpo y sus posibilidades motrices, dramáticas y creativas…", prop: "Interpretación corporal: interpretar la coreografía propuesta." },
+
+            "C9_14": { text: "C9. Técnicas básicas dramáticas y dancísticas. Nociones elementales…", prop: "Interpretación corporal: crear una coreografía para su acompañamiento." },
+            
+            "C10_9": { text: "C10. Capacidades expresivas y creativas de la expresión corporal y dramática.", prop: "Interpretación corporal: interpretar la coreografía propuesta." },
+            
+            "C11_9": { text: "C11. Elementos de la representación y creación escénica.", prop: "Conocimiento musicológico: conocer los elementos de la representación escénica." },
+            
+            "C12_9": { text: "C12. Aproximación a los géneros escénicos…", prop: "Conocimiento musicológico: conocer los elementos de la representación escénica." }
+        };
+
+        // 3. GENERADORES DINÁMICOS DE INTERFAZ
+        
+        // Genera tarjetas de objetivos de etapa (Nomenclatura limpia sin "Obj.")
+        function generateObjetivos() {
+            const grid = document.getElementById('grid-objetivos');
+            grid.innerHTML = '';
+            
+            Object.keys(OBJETIVOS).forEach(key => {
+                const obj = OBJETIVOS[key];
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-200 flex flex-col";
+                card.innerHTML = `
+                    <div class="p-5 flex-grow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-amber-100 text-amber-800 p-2.5 rounded-lg flex items-center justify-center">
+                                <i data-lucide="${obj.icon}" class="w-5 h-5"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 leading-tight text-base">${obj.title}</h4>
+                        </div>
+                        <p class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100 font-serif leading-relaxed mb-4">
+                            ${obj.text}
+                        </p>
+                        <!-- Desplegable interno -->
+                        <div id="contrib-obj-${key}" class="accordion-content max-h-0 opacity-0 overflow-hidden">
+                            <div class="pt-2 border-t border-slate-100">
+                                <h5 class="text-xs font-bold text-amber-700 flex items-center gap-1">
+                                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Contribuciones de Detectives Musicales:
+                                </h5>
+                                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                                    ${obj.contribution}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="toggleAccordion('contrib-obj-${key}', this)" class="bg-slate-50 hover:bg-slate-100 border-t border-slate-100 py-3 text-center text-xs font-bold text-slate-700 flex items-center justify-center gap-1 transition-all">
+                        <span>Ver contribución</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Genera tarjetas de competencias clave
+        function generateCompetencias() {
+            const grid = document.getElementById('grid-competencias');
+            grid.innerHTML = '';
+            
+            Object.keys(COMPETENCIAS).forEach(key => {
+                const comp = COMPETENCIAS[key];
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all duration-200 flex flex-col";
+                card.innerHTML = `
+                    <div class="p-5 flex-grow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="bg-blue-100 text-blue-800 p-2.5 rounded-lg flex items-center justify-center">
+                                <i data-lucide="${comp.icon}" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-extrabold text-blue-600 uppercase tracking-widest">${comp.code}</span>
+                                <h4 class="font-bold text-slate-800 leading-tight text-base">${comp.name}</h4>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100 mb-4 leading-relaxed font-sans">
+                            ${comp.text}
+                        </p>
+                        <!-- Desplegable interno -->
+                        <div id="contrib-comp-${key}" class="accordion-content max-h-0 opacity-0 overflow-hidden">
+                            <div class="pt-2 border-t border-slate-100">
+                                <h5 class="text-xs font-bold text-blue-700 flex items-center gap-1">
+                                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Contribución en el aula:
+                                </h5>
+                                <p class="text-xs text-slate-600 mt-1 leading-relaxed font-sans">
+                                    ${comp.contribution}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="toggleAccordion('contrib-comp-${key}', this)" class="bg-slate-50 hover:bg-slate-100 border-t border-slate-100 py-3 text-center text-xs font-bold text-slate-700 flex items-center justify-center gap-1 transition-all">
+                        <span>Ver contribución</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Genera la tabla de relaciones y las tarjetas móviles
+        function generateRelaciones() {
+            const tbody = document.getElementById('table-relaciones-body');
+            const mobileCards = document.getElementById('cards-relaciones-movil');
+            tbody.innerHTML = '';
+            mobileCards.innerHTML = '';
+
+            RELACIONES.forEach(rel => {
+                const comp = COMPETENCIAS[rel.comp];
+                
+                // Generar insignias para los objetivos asociados
+                let badgeHTML = '';
+                rel.objetivos.forEach(objKey => {
+                    const obj = OBJETIVOS[objKey];
+                    badgeHTML += `
+                        <button onclick="openModal('${objKey}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 font-black text-xs px-3 py-1.5 rounded-lg shadow-sm transition-all flex items-center gap-1 hover:scale-105 active:scale-95" title="Hacer clic para ver objetivo oficial">
+                            <i data-lucide="target" class="w-3.5 h-3.5"></i> Obj. ${objKey}
+                        </button>
+                    `;
+                });
+
+                // HTML para tabla escritorio
+                const row = document.createElement('tr');
+                row.className = "hover:bg-slate-50/50 transition-colors duration-150";
+                row.innerHTML = `
+                    <td class="py-4 px-6 border-b border-slate-100 align-middle">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-slate-100 text-slate-700 p-2 rounded-lg">
+                                <i data-lucide="${comp.icon}" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="bg-blue-100 text-blue-800 text-[10px] font-black px-2 py-0.5 rounded-md border border-blue-200 uppercase">${comp.code}</span>
+                                <h5 class="text-sm font-bold text-slate-800 mt-1">${comp.name}</h5>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6 border-b border-slate-100 align-middle">
+                        <div class="flex flex-wrap gap-2.5">
+                            ${badgeHTML}
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+
+                // HTML para tarjetas en versión móvil
+                const mCard = document.createElement('div');
+                mCard.className = "p-4 space-y-3";
+                mCard.innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <div class="bg-slate-100 text-slate-700 p-2 rounded-lg">
+                            <i data-lucide="${comp.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <span class="bg-blue-100 text-blue-800 text-[10px] font-black px-2 py-0.5 rounded-md border border-blue-200 uppercase">${comp.code}</span>
+                            <h5 class="text-sm font-bold text-slate-800">${comp.name}</h5>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 mb-2">Objetivos Vinculados (Pulsa para ver detalle):</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${badgeHTML}
+                        </div>
+                    </div>
+                `;
+                mobileCards.appendChild(mCard);
+            });
+            lucide.createIcons();
+        }
+
+        // NUEVO GENERADOR: MATRIZ DE SECUENCIACIÓN EN ESPIRAL (TABLA DE DOBLE ENTRADA)
+        let activeApartadoFilter = 'todos';
+
+        // ... Lógica de filtrado de apartados conservada exactamente ...
+        function filterByApartado(apartadoId) {
+            activeApartadoFilter = apartadoId;
+            
+            // Sincronizar el select de móvil si existe
+            const selectEl = document.getElementById('filter-select-apartado');
+            if (selectEl) {
+                selectEl.value = apartadoId;
+            }
+
+            // Cambiar clases de los botones de filtro (para pantallas grandes)
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.className = "filter-btn px-4 py-2 rounded-lg text-xs font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-300";
+            });
+
+            const activeBtn = document.getElementById(`filter-btn-${apartadoId}`);
+            if (activeBtn) {
+                activeBtn.className = "filter-btn px-4 py-2 rounded-lg text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-sm border border-amber-400";
+            }
+
+            filterContents();
+        }
+
+        function filterContents() {
+            const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+            
+            const filteredContenidos = CONTENIDOS.filter(item => {
+                // Filtro por apartado
+                const matchesApartado = (activeApartadoFilter === 'todos' || item.apartado === activeApartadoFilter);
+                
+                // Filtro por texto de búsqueda
+                const matchesSearch = (
+                    item.id.toLowerCase().includes(searchQuery) ||
+                    item.text.toLowerCase().includes(searchQuery)
+                );
+
+                return matchesApartado && matchesSearch;
+            });
+
+            renderSecuenciacionTable(filteredContenidos);
+        }
+
+        // Renderizado de las filas de contenidos y UPDs para la secuenciación
+        function renderSecuenciacionTable(contenidosList = CONTENIDOS) {
+            const tbody = document.getElementById('table-secuenciacion-body');
+            tbody.innerHTML = '';
+
+            if (contenidosList.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="16" class="py-12 text-center bg-white text-slate-400">
+                            <div class="flex flex-col items-center justify-center space-y-2">
+                                <i data-lucide="search-code" class="w-12 h-12 text-slate-300"></i>
+                                <span class="font-bold">Sin huellas del expediente</span>
+                                <span class="text-xs">No hay contenidos curriculares que coincidan con tu búsqueda.</span>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            contenidosList.forEach(content => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors border-b border-slate-100";
+
+                // Celda 1: Apartado (Sticky) con nombre largo normativo (Ancho de 110px) - Sincronizado a md:
+                let apartadoBadgeColor = "";
+                if (content.apartado === "A") apartadoBadgeColor = "bg-purple-100 text-purple-800 border-purple-200";
+                if (content.apartado === "B") apartadoBadgeColor = "bg-sky-100 text-sky-800 border-sky-200";
+                if (content.apartado === "C") apartadoBadgeColor = "bg-rose-100 text-rose-800 border-rose-200";
+
+                let celdaApartado = `
+                    <td class="py-3.5 px-2 md:sticky md:left-0 bg-white md:z-20 border-r border-slate-100 text-center align-middle shadow-[2px_0_5px_rgba(0,0,0,0.03)] w-[110px] min-w-[110px] max-w-[110px]">
+                        <span class="text-[10px] font-bold px-1.5 py-1.5 rounded-md border ${apartadoBadgeColor} block text-center tracking-tight leading-tight">
+                            ${APARTADOS[content.apartado]}
+                        </span>
+                    </td>
+                `;
+
+                // Celda 2: Contenido Curricular (Sticky) alineado exactamente a md:left-[110px]
+                let celdaContenido = `
+                    <td class="py-3 px-4 md:sticky md:left-[110px] bg-white md:z-20 border-r border-slate-100 align-middle shadow-[4px_0_8px_rgba(0,0,0,0.05)] w-[320px] min-w-[320px] max-w-[320px]">
+                        <div class="flex items-start gap-2">
+                            <span class="bg-slate-800 text-slate-100 font-extrabold text-[10px] px-2 py-0.5 rounded shrink-0">${content.id}</span>
+                            <p class="text-[11px] text-slate-600 leading-relaxed font-sans">${content.text}</p>
+                        </div>
+                    </td>
+                `;
+
+                tr.innerHTML = celdaApartado + celdaContenido;
+
+                // Celdas 3 a 16: Intersecciones para las 14 UPDs (Ajustadas a 210px de ancho)
+                for (let updId = 1; updId <= 14; updId++) {
+                    const key = `${content.id}_${updId}`;
+                    const conexion = CONEXIONES[key];
+
+                    let celdaInterseccion = "";
+                    if (conexion) {
+                        // Se renderiza de forma visible en la celda el texto descriptivo resumido (conexion.text)
+                        celdaInterseccion = `
+                            <td class="p-2 align-middle text-center w-[210px]">
+                                <div onclick="openMatrixModal('${content.id}', ${updId})" class="mx-auto w-[185px] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 rounded-lg p-2 text-[10px] text-left leading-snug cursor-pointer shadow-sm hover:shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] duration-150 flex flex-col justify-between h-[75px]">
+                                    <div class="font-medium line-clamp-3">
+                                        ${conexion.text}
+                                    </div>
+                                    <div class="flex justify-end pt-1 shrink-0 text-emerald-600">
+                                        <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                </div>
+                            </td>
+                        `;
+                    } else {
+                        // Celda inactiva con marcador sutil
+                        celdaInterseccion = `
+                            <td class="p-2 align-middle text-center text-slate-200 w-[210px]">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-200"></span>
+                            </td>
+                        `;
+                    }
+                    tr.innerHTML += celdaInterseccion;
+                }
+
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        // 3. CONTROLADORES DE EVENTOS E INTERACCIONES
+
+        // Toggle para expandir/colapsar acordeones
+        function toggleAccordion(id, btn) {
+            const content = document.getElementById(id);
+            const icon = btn.querySelector('[data-lucide="chevron-down"]');
+            
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0px';
+                content.style.opacity = '0';
+                if (icon) icon.style.transform = 'rotate(0deg)';
+                btn.querySelector('span').innerText = 'Ver contribución';
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                content.style.opacity = '1';
+                if (icon) icon.style.transform = 'rotate(180deg)';
+                btn.querySelector('span').innerText = 'Ocultar detalles';
+            }
+        }
+
+        // Gestión del menú móvil hamburguesa
+        let isMobileMenuOpen = false;
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const openIcon = document.getElementById('menu-icon-open');
+            const closeIcon = document.getElementById('menu-icon-close');
+            
+            isMobileMenuOpen = !isMobileMenuOpen;
+            if (isMobileMenuOpen) {
+                menu.classList.remove('hidden');
+                openIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+                openIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        // Cambio de pestañas (Tab switching SPA)
+        function switchTab(tabId) {
+            // Ocultar todas las secciones
+            document.getElementById('section-objetivos').classList.add('hidden');
+            document.getElementById('section-competencias').classList.add('hidden');
+            document.getElementById('section-relaciones').classList.add('hidden');
+            document.getElementById('section-secuenciacion').classList.add('hidden');
+
+            // Mostrar sección activa
+            document.getElementById(`section-${tabId}`).classList.remove('hidden');
+
+            // Desactivar botones de navegación (escritorio)
+            const desktopButtons = document.querySelectorAll('.tab-btn');
+            desktopButtons.forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800";
+            });
+
+            // Activar botón de navegación seleccionado (escritorio)
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "tab-btn px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center gap-2 text-amber-400 bg-slate-800/80 border border-amber-500/30";
+            }
+
+            // Actualizar menú móvil si procede
+            const mobileButtons = document.querySelectorAll('#mobile-menu button');
+            mobileButtons.forEach(btn => {
+                btn.className = "w-full text-left px-4 py-3 rounded-lg text-base font-semibold flex items-center gap-3 text-slate-300 hover:bg-slate-900";
+            });
+
+            const activeMobileBtn = document.getElementById(`mobile-tab-btn-${tabId}`);
+            if (activeMobileBtn) {
+                activeMobileBtn.className = "w-full text-left px-4 py-3 rounded-lg text-base font-semibold flex items-center gap-3 text-amber-400 bg-slate-900 border-l-4 border-amber-500";
+            }
+
+            // Cerrar menú móvil si estuviera abierto
+            if (isMobileMenuOpen) {
+                toggleMobileMenu();
+            }
+
+            // Scroll suave hacia arriba
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Abre modal para mostrar texto de objetivo concreto
+        function openModal(objKey) {
+            const obj = OBJETIVOS[objKey];
+            if (!obj) return;
+
+            // Mostrar "Obj. a) Valores y normas de convivencia" unificado en la cabecera
+            document.getElementById('modal-obj-title').innerText = `Obj. ${obj.title}`;
+            document.getElementById('modal-obj-text').innerText = obj.text;
+
+            const modal = document.getElementById('objective-modal');
+            const container = document.getElementById('modal-container');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                container.classList.remove('scale-95', 'opacity-0');
+                container.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // Cierra el modal de forma segura
+        function closeModal(event) {
+            const modal = document.getElementById('objective-modal');
+            const container = document.getElementById('modal-container');
+            
+            container.classList.remove('scale-100', 'opacity-100');
+            container.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // NUEVAS FUNCIONES DE CONTROL: MODAL DETALLE DE LA MATRIZ DE SECUENCIACIÓN
+        function openMatrixModal(contentId, updId) {
+            const content = CONTENIDOS.find(c => c.id === contentId);
+            const key = `${contentId}_${updId}`;
+            const conexion = CONEXIONES[key];
+            const updName = UPDS[updId];
+
+            if (!content || !conexion) return;
+
+            // Rellenar datos
+            document.getElementById('matrix-modal-upd-name').innerText = updName;
+            // El modal sigue mostrando arriba el texto curricular explicativo largo del contenido base
+            document.getElementById('matrix-modal-content-text').innerHTML = content.text;
+            // Modificado según la petición: en la caja destacada inferior, se muestra la propuesta (conexion.prop)
+            document.getElementById('matrix-modal-propuesta').innerText = conexion.prop;
+
+            // Mostrar modal
+            const modal = document.getElementById('matrix-modal');
+            const container = document.getElementById('matrix-modal-container');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                container.classList.remove('scale-95', 'opacity-0');
+                container.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // Cierra el modal de la matriz
+        function closeMatrixModal() {
+            const modal = document.getElementById('matrix-modal');
+            const container = document.getElementById('matrix-modal-container');
+            
+            container.classList.remove('scale-100', 'opacity-100');
+            container.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // 5. INICIALIZACIÓN DE LA PÁGINA
+        window.onload = function() {
+            // Generar todos los contenidos de la SPA
+            generateObjetivos();
+            generateCompetencias();
+            generateRelaciones();
+            renderSecuenciacionTable();
+        };
+    </script>
+</body>
+</html>
